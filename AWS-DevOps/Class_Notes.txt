@@ -826,3 +826,275 @@ Next :
 	Create CodeBuild Project 
 	
 	Create CodeDeploy 
+
+
+######################
+Day 4 - 9th Mar. 2025
+######################		
+
+	
+	Create CodeBuild Project :::
+	
+	Continuous Deployment ::: 	Micro-Service Based Application Architecture
+								Containerized Deployment
+								
+	Containerization ::: 						
+								
+								
+								
+	Build_Server :
+	
+		--> EC2 Instance :
+		
+				-> CodeBuild Agent 
+				
+				-> jdk 
+				
+				-> maven 
+				
+				-> git 
+				
+	AWS Cli ==> Create CodeBuild 
+	
+		Build Application : Self Hosted Build Server 	-> Use this as a build Server.
+		
+							AWS Managed Build Server 	-> (Dynamic Creation during build, And gets deleted after build)
+							
+							
+	Target Server :
+	
+		--> EC2 Instance :
+		
+				-> CodeDeploy Agent
+		
+				-> jdk 
+				
+				-> Tomcat
+				
+				
+	
+	
+	CodeBuild Service :
+	
+		-> EC2 Instance 
+		
+			-> CodeBuild Agent 
+								
+								
+	Jenkins_Master 
+	
+		Jenkine_Slave (Build_Server)
+		
+		
+		
+	Containerization :::		
+	
+
+	Open-Source: 		AWS: 		Azure: 		GCP:
+
+
+	Docker Engine 		ECS 		ACS 		GCE 
+	                                        
+	DockerHub           ECR     	ACR         GCR 
+	                                        
+	Kubernetes          EKS     	AKS         GKE 
+	
+	
+	Containerization :::
+	
+		-> It is a process of packaging the Application along with its dependencies.
+		
+	
+	Developers' perspective :
+	
+		Dev Environment (Local Machine) :
+		
+			Create Source-Code (Visual Studio Code)
+			
+			Push the Changes to Github Repo
+		
+			Build & Create Artifacts ==> mywebapp.war 
+			
+			Unit Level Testing using Openjdk_17,Tomcat_Server_V8.5
+			
+			
+			Package : (mywebapp.war,openjdk17,Tomcat_Server_V8.5)	==> Application_Container_Image ==> mywebapp_img:v1.0
+			
+			
+			Publish the mywebapp_img:v1.0 to Container Registry(DockerHub/ECR/ACR/GCR)
+			
+			
+			###Promote the *.war to target server
+			
+			
+		QA_Server 		==> 	mywebapp.war 
+		
+			Install Docker Container-Engine 
+		
+			pull mywebapp_img:v1.0 from Container Registry(DockerHub/ECR/ACR/GCR)
+		
+			- openjdk17, Tomcat8.5
+		
+		UAT_Server 		==> 	mywebapp.war
+		
+			- jdk, Tomcat 		
+		
+		
+		PROD_Server 	==> 	mywebapp.war
+		
+			- jdk, Tomcat 	
+	
+	
+	How to Create Container Image ??
+	
+	
+	
+		1. Install Docker Container-Engine in the Build Server 
+		
+		
+		2. Docker CLI Commands to interact with Container Engine and Create Container Images and Containers.
+		
+		
+		Create Container Images: 
+		
+			- docker commit
+				
+				-> Used to create an image based on the existing Container reference
+				-> Used to Create Container/Server Templates 
+				-> Created by the infra-team 
+					
+				
+			- docker build 
+			
+				-> Used to create an image based on the Dockerfile reference
+				-> Dockerfile will be created by the Developers and maintain the source code repository
+	
+	
+				Github Repos :					Artifactory Libraries/Jfrog/S3			DockerHub/ECR/ACR/GCR
+	
+				mywebapp.java_v1.0				mywebapp.war_V1.0						mywebapp_img:V1.0
+				mywebapp.java_v1.1				mywebapp.war_V1.1               		mywebapp_img:V1.1
+				mywebapp.java_v1.2				mywebapp.war_V1.2               		mywebapp_img:V1.2
+				mywebapp.java_v1.3				mywebapp.war_V1.3               		mywebapp_img:V1.3
+				mywebapp.java_v1.4				mywebapp.war_V1.4               		mywebapp_img:V1.4
+
+		
+		Dockerfile :::
+		
+		
+		Terminologies related to Docker:
+		
+		
+			- Containerization 				# It is a process of packaging the Application along with its dependencies.
+			
+			- Container Engine				# Used to Create and manage the Container Images and Containers 
+			
+			- Docker Cli Command			# Used to interact with Container Engine 
+			
+			- Container Image 				# It is static file that defines the Properties & Dependencies of the Container
+											# Non-Executable
+											# It compose of Dockerfile Instructions called as Layers of Container Image.
+											
+			- Container 					# Is an executable unit of Container Image 
+											# Instance of Container Image 
+			
+			- Container Registry 			# It used to Save/Version Control the Container Images 
+											# DockerHub -- Account 
+											# https://hub.docker.com/
+			
+			- Container Repositories		# Sub-sets of Container Registry
+			
+			
+		Dockerfile Creation :::	
+
+
+			- Install Docker-Engine 
+			
+				sudo -i 
+				
+				apt install docker.io -y				# https://docs.docker.com/engine/install/
+			
+			- Using Docker CLi Commands 
+			
+				docker images					# To list the images in the local machine  
+				
+				docker ps 						# To list all the Active/Running process/Container 
+				
+				docker ps -a 					# To list all the Active and stopped/Exit Container 
+				
+		
+		Property of any Container :
+		
+		
+			- Container are considered as a OS level Virtualization.
+			
+			- Containers are created using Container-Engine.
+			
+			- Containers is used to execute any task/application. 
+			
+			- Containers are not used to execute an Operating System 
+			
+			- If there is no Task/Application, or if the task/application gets completed, The Containers will go to exit state.
+
+			- Container are used to reduce the no. of VMs. and save Infra-Structure Cost. 
+			
+			- Container runs in its own isolated address space
+			
+				-> Kernel (Core of Linux Operating System)
+				
+					-> Namespaces 					
+					-> Control Groups 
+				
+				
+			
+			
+			- Virtual Machine :
+			
+				- Install Container Engine 
+				
+						- C1,2,3,4,5,6,7,8,9,....................,n 
+						
+			
+			
+				- Create Container Images 	
+					
+						docker commit 
+						
+						docker build 
+						
+						
+						
+			- Using Docker CLi Commands 
+			
+				docker images					# To list the images in the local machine  
+				
+				docker ps 						# To list all the Active/Running process/Container 
+				
+				docker ps -a 					# To list all the Active and stopped/Exit Container 
+				
+				
+				docker pull <image_name>		# Download a container image from DockerHub Container Registry	to local machine
+				
+				docker run	<image_name>		# To Create Container based on the Image 	
+
+				Modes of Docker Run :::
+				
+					1. Fore-ground/Attached Mode 		# Default Mode of Container Executation.
+														# Terminal will be reserved to that Container
+					
+					2. Back-ground/Detached Mode		# To Execute Containers in Back-ground
+				
+					3. Interactive Mode 				# Login to Execute
+					
+	
+Next :
+
+	Work with Container Engine 
+	
+		- docker Commit / build 
+		
+		- push to DockerHub / ECR 
+		
+	Enhance Code Build Project using Container Images 
+
+	Code Deploy 
