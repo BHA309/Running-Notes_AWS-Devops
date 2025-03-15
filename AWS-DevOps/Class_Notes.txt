@@ -1098,3 +1098,352 @@ Next :
 	Enhance Code Build Project using Container Images 
 
 	Code Deploy 
+
+
+######################
+Day 5 - 15th Mar. 2025
+######################
+	
+	Code Build :::
+		
+	Code Deploy :::
+	
+	Code Pipeline :::
+	
+
+	DevOps Workflow :
+	
+		Build Orchestration Tools :
+		
+			- Jenkins							java - groovy scripting language
+			- gitlab-ci 						Declarative Scripts - *.yaml
+			- bamboo 
+			- Azure Pipelines 
+			- GitHub-Actions
+			- AWS CodePipeline 
+			
+		Jenkins Architecture :
+		
+			Jenkins_Master(VM) 			--> Create Jenkins Pipeline Projects & Schedule to run in the Build Agents(Master/Slave)				
+			
+				Jenkins_Slave_Nodes(VM)	--> Used to execute the Jenkins Pipeline Projects
+				
+		
+		Scenario 1 :
+		
+			Java Based Application : Maven 
+			
+			Build Frequency / Release Frequency : 4 Builds/w & 2 Releases/m 
+			
+			
+			Jenkins_Master(VM) 			--> Create Jenkins Pipeline Projects & Schedule to run in the Build Agents(Master)
+										--> git,jdk,jenkins,Maven,docker 
+										
+										
+		Scenario 2 :
+		
+			Build Frequency / Release Frequency : HIGH !
+
+			Multiple Programming Languages to Deploy :
+				
+			
+			Jenkins_Master(VM) 			--> Create Jenkins Pipeline Projects & Schedule to run in the Build Agents(Slave_Node)				
+										--> git,jdk,jenkins
+				
+				Jenkine_Slave_Node1(VM)	--> Java_Build 
+				Jenkine_Slave_Node2(VM)	--> Python 
+				Jenkine_Slave_Node3(VM)	--> .Net_Build 
+				Jenkine_Slave_Node4(VM)	--> Angular_Build 
+				Jenkine_Slave_Node5(VM)	--> NodeJS_Build 
+				Jenkine_Slave_Node6(VM)	--> Ruby_Build 		
+				
+	
+		Containers :
+		
+		Infra-Structure Perspective :
+		
+			Infra-Structure Management Team :
+			
+				- Provision the Infra-Structure 		# Create Servers & Resources 
+				
+				- Configure Infra-Structure 			# Setup/Install/Uninstall/Upgrade the Tools and services in the Servers 
+		
+			
+		- Containerization 				# It is a process of packaging the Application along with its dependencies.
+										# To reduce the no. of VMs.
+										# Container are used to reduce the no. of VMs. and save Infra-Structure Cost. 
+		
+		
+			Jenkins_Master(VM) 			--> Create Jenkins Pipeline Projects & Schedule to run in the Build Agents(Slave_Node)				
+										--> git,jdk,jenkins
+										
+				Jenkins_Build_Agent(VM) 
+					- Install Container Engine 
+							C1				--> Java_Build
+							C2 				--> Python 
+							C3              --> .Net_Build 
+							C4              --> Angular_Build 
+							C5              --> NodeJS_Build 
+							C6              --> Ruby_Build 	
+							
+							
+					- Server Templates :::
+					
+					
+		How to Create Container Images :::
+		
+			--> docker Commit / build ::
+			
+			
+			--> Docker Commit : 	# It is used to Create a docker container image based on the existing Container Reference 
+									# Used to Create kind of Server template to build server
+									
+			--> Docker Build :		# It is used to Create a docker container image based on the Dockerfile Instructions
+									
+									
+									
+		Use Case 1 :	To Create Java Build Environment - Container (git/jdk/mvn)
+		
+			- Create a Contianer
+				
+					docker run -it ubuntu bash 					# Always create a Container 
+			
+			- Start Container 
+			
+					docker ps -a 
+			
+					docker start <container_id>
+			
+			- Login to running Container
+				
+					docker exec -it <container_id> bash 		# Login to the existing/running Contianer 
+			
+			- Stop the Container 
+									
+					docker stop <container_id>
+					
+		
+		Create a New Container Image using the Existing Container reference :::
+		
+			- docker commit Command :::
+		
+				Syntax :
+				
+					docker commit <existing_Contiainer_ID> <Container_Repository_Name>/<New_Container_Image_Name>:<Tag>
+					
+					# Container_Repository_Name --> Is the DockerHub Repository Name
+					
+					# https://hub.docker.com/
+		
+		
+				docker commit 6da9b479e29f loksaieta/myjavabsimage:v1.0
+				
+				
+				
+		Docker Push :::
+		
+			- To Push the Docker Image from Local Machine to Dockerhub Registry 
+			
+			
+				- Login to DockerHub using Docker CLI 
+				
+					- UserName 
+					
+						docker login -u loksaieta
+					
+					- Password --> PAT to be created in DockerHub 
+					
+						sdfasdfasdfasdfasdf
+						
+		
+			docker push <Container_Repository_Name>/<New_Container_Image_Name>:<Tag>
+			
+			docker push loksaieta/myjavabsimage:v1.0
+									
+			
+		
+		
+		Docker Build :		# It is used to Create a docker container image based on the Dockerfile Instructions
+							# Used by developers to create application images
+
+			Dockerfile :::
+
+			- Container Image 				# It is static file that defines the Properties & Dependencies of the Container
+											# Non-Executable
+											# It compose of Dockerfile Instructions called as Layers of Container Image.
+											# Dockerfile will be created and maintained in the source code repository by the developers
+			
+
+			vi Dockerfile
+			
+			FROM ubuntu 
+			RUN apt update -y 
+			RUN apt install git -y 
+			RUN apt install maven -y 
+			
+			save 
+			
+			docker build -t <Container_Repository_Name>/<New_Container_Image_Name>:<Tag> .			# Dockerfile reference
+			
+			
+			Dockerfile Instructions :::
+			
+			
+				FROM 				# To identify the Base Image 
+				
+				RUN 				# Execute any package 
+				
+				WORKDIR				# Set the Current Working Directory 
+				
+				ENV 				# Set the Environment Path Variables
+				
+				COPY 				# To Copy the files from the host volume to Container Volume 
+				
+				CP					# To Copy the files within the Container Volumes 			
+				
+				ADD 				# To Copy the files from the external URL(S3 URL) as well as from the host volume to Container Volume 
+				
+				EXPOSE				# Set the default Container Port 
+				
+				CMD 				# Set the start-up Task to the Container 
+									# This Start-up Task/Command can be changed at runtime								
+									
+				ENTRYPOINT			# Set the start-up Task to the Container  
+									# This Start-up Task/Command cannot be changed at runtime
+									
+									
+				
+		CICD Pipeline :
+
+			Using CodeBuild :::: Containerize the Web Application Services
+
+			
+			FROM tomcat:8.0
+			COPY ./target/loksaieta.war /usr/local/tomcat/webapps
+			EXPOSE 8080
+			
+			
+			
+		CI/CD 
+		
+			- Build Pipeline 		
+			
+				SCM_Checkout
+				Application Build(Create Artifacts)
+				Application Image Build(Dockerfile)
+				Publish Application Image to Container Registry
+				
+			
+			- Release Pipeline 
+			
+				Pull the Application Image from container Registry
+				Execute the Application using Containers 
+				
+		
+		CICD Pipeline ::
+		
+				SCM_Checkout
+				Application Build(Create Artifacts)
+				Application Image Build(Dockerfile)
+				Publish Application Image to Container Registry		
+				
+				Pull the Application Image from container Registry into QA Server
+				Execute the Application using Containers 			
+				
+				Pull the Application Image from container Registry into UAT Server
+				Execute the Application using Containers 	
+				
+				Pull the Application Image from container Registry into PROD Server
+				Execute the Application using Containers 				
+		
+		
+		How to Manage the Container Data ???
+		
+		
+			Containers ==> are not the permanent entities!
+			
+			Container are used just to run the application. Not to save any data!
+			
+			Container Volumes mount.
+			
+			Stateful / Stateless Applications 
+			
+			By Default, Containers are meant for Stateless Applications 
+			
+			Stateless Applications 		# It will never leave a state of execution 
+			
+			stateful Applications		# It will leave a trace of execution(logs/reports/files/arguement/datafiles)
+			
+			
+			
+			
+			3-Tier Applications:
+			
+				-> Front-End Layer 		# User Interaction
+				
+				-> Application Layer 	# Business Logics 
+				
+				-> Back-End Layer 		# Database 
+		
+		
+			www.amazon.com 
+			
+			
+			sign_in service 
+	
+				-> Front-End Layer 		# User Interaction		C1 
+				
+				-> Application Layer 	# Business Logics 		C2 
+				
+				-> Back-End Layer 		# Database 				C3 
+				
+				
+		
+			Docker Volume :::
+			
+			S3 Bucket as a Storage 
+			
+			Kubernetes ::: 
+			
+			
+			ECS / EKS 
+			
+			ACS / AKS 
+			
+			GCE / GKE 
+	
+	
+		CI/CD Pipeline :::
+		
+		Kubernetes :::
+
+			- Kubernetes is an Open-Source Container Orchestration Tool 
+			- To ensure high availability of Containerized Applications
+			- By create replicas
+			- Auto-Scale : Scale-up/Scale-Down
+			- Load-Balancing 
+			- Self-Healing 
+
+			Managed/Paid Kubernetes Services from Service Providers :
+			
+				ECS / EKS 
+				
+				ACS / AKS 
+				
+				GCE / GKE 		
+
+				- 3 Replicas of Containers 
+				
+			sign_in service 
+	
+				-> Front-End Layer 		# User Interaction		C1.1,C1.2,C1.3
+				
+				-> Application Layer 	# Business Logics 		C2.1,C2.2,C2.3
+				
+				-> Back-End Layer 		# Database 				C3.1,C3.2,C3.3 	
+				
+				
+				
+				Kubernetes-Master 
+				
+					- Kubernetes-WorkerNode1,2,3,4,5
