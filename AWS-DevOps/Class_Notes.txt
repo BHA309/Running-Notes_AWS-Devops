@@ -1447,3 +1447,386 @@ Day 5 - 15th Mar. 2025
 				Kubernetes-Master 
 				
 					- Kubernetes-WorkerNode1,2,3,4,5
+
+
+	
+########################
+Day 6 - 16th Mar. 2025
+########################	
+
+	Code Build/Deploy/Pipeline ::::
+	
+	Containerization 
+	
+	Container Orchestration Tool - Kubernetes 
+	
+	Build Pipeline :
+	
+		Github ==> Build Agents/ECS/ECR/ ==>	Application readiness for deployment			*.war 
+	
+	Release Pipeline :
+	
+		Build Artifacts(S3)/ECR ==>	Target Server(Deployment_Server/Kubernetes_Cluster)
+	
+	
+	Environments :
+
+		Non-Prod												Prod-Environments
+	
+			Dev 
+			
+			Build 
+			
+			Target Environments (Kubernetes)
+			
+				QA 
+				
+				UAT 					============>				Prod Server1,2,3,4,5 (Deployment Group) 	# Non-Containerized Apps
+	
+	
+																	Kubernetes-Cluster 							# Containerized Apps
+																		Kubernetes-WorkerNode1,2,3,4,5
+	
+	
+	Kubernetes-Master(Non-Prod)										Kubernetes-Master(Prod)
+		Kubernetes-WorkerNode1,2,3,4,5                              	Kubernetes-WorkerNode1,2,3,4,5
+			QA/UAT
+			
+	Difference between Open-Source & EKS :
+	
+		EKS : GUI based Interface , Kubernetes-Dashboards, In-build-Monitoring (AWS-Cloud-Watch), Auto-Scaling Group, Load-Balancer Service
+			
+		Open-Source K8s :
+		
+			: Dedicated Kubernetes Resources, Command Line Utilities - Kubeadm,kubectl, 
+					
+					Additionally we need to setup Kubernetes-Dashboards, In-build-Monitoring, Auto-Scaling Group - HELM Charts
+					
+					Load-Balancer Service(Service Provider - AWS/Azure/GCP) / Create Own On-Prem Load-Balancer using Nginx
+					
+					
+	
+	Resources (Target Environments) are Created ?
+	
+	
+		- IAC Tools : Infra-Structure As Code!
+		
+			- CloudFormation is an IaC Tool - meant for AWS specific resources. 
+			
+			- Declarative scripts --> *.yaml / *.json 
+			
+			
+		- Terraform is an alternative support multi-cloud/Hybrid resource provisioning!
+		
+		
+		AWS CloudFormation :
+		
+			- Provision 
+			
+			- Configuration 
+			
+			- Automated Rollback
+			
+			- Resource Termination
+			
+		
+		AWS CF using Cloudformation Templates & Cloudformation Stacks 
+		
+			
+		CF Templates : To define the desired state of the Infra-Structure written in *.yaml / *.json --> keys:values Pairs 
+					
+					
+		CF Stack : 	Is a collection of resources can be executed as a single unit. 
+		
+					It helps to preview the resources implement some run time parameters 
+					
+					Able to control/manage/update/execute & Terminate the resources 
+	
+	
+					How to Access : AWS Console(GUI), AWS CLI, AWS SDK 
+					
+		CF Nested Stacks :
+		
+			CF Template1 : Create VPC 
+			
+			CF Template2 : Create EC2 DependsOn
+			
+		CF StacksSets :
+			
+			Deploy the CF Template in different AWS Regions 
+			
+			
+		All the CF Templates are saved in s3 Bucket(by Default) / Github Repo 
+		
+		
+		CF Functions : To Automate / Manage the CF Templates 
+		
+			Fn::getAtt:
+			
+			
+		Python Scripts : Create AWS Resources boto3 Python Library!
+		
+		
+		
+		CF Framework/Process Workflow :
+		
+		
+			1. Create CF Template	--> Stored in S3 Bucket		--> 	Create CF Stack and Execute 
+			
+	
+		CF Template Sections : --> Building Blocks to Create CF Templates
+		
+		
+		Format Version 
+		
+		Resources 	
+		
+		Description 
+		
+		MetaData & Parameters 		# To customize the input parameters 
+		
+		Mappings 					# Map any resources
+		
+		CFT Functions 
+		
+		CFT Conditions
+		
+				DependsOn 
+				
+					VPC,DependsOn - Subnet,DependsOnRT,DependsOnRTA,InternetGateway,security_group,EC2_Instance
+	
+				Create  a resource of for prod envi. 
+			
+				variable 
+		
+		Transform / Rules  			# Validation of of Parameters  
+		
+		
+		TroubleShooting the CF Template Stack!
+		
+		Cloud Watch Monitoring Logs 
+		
+		To Create CF Templates --> 	Use Visual Studio Code IDE 
+									AWS CF Extension for VS Code 
+{
+    "AWSTemplateFormatVersion": "2010-09-09",
+    "Description": "Creating a new S3 bucket",
+    "Resources": {
+      "s3Bucket": {
+        "Type": "AWS::S3::Bucket",
+        "Properties": {
+          "BucketName": "edu-16-s3"
+        }
+      }
+    }
+}									
+									
+		GitOps:
+		
+			Resources:
+			  Bucket:
+				Type: AWS::S3::Bucket
+				Properties:
+				  BucketName: !Sub ${AWS::StackName}-bucket-${AWS::AccountId}
+				  BucketEncryption:
+					ServerSideEncryptionConfiguration:
+					  - ServerSideEncryptionByDefault:
+						  SSEAlgorithm: aws:kms
+						  KMSMasterKeyID: alias/aws/s3
+				  PublicAccessBlockConfiguration:
+					IgnorePublicAcls: true
+					RestrictPublicBuckets: true
+			  BucketBucketPolicy:
+				Type: AWS::S3::BucketPolicy
+				Properties:
+				  Bucket: !Ref Bucket
+				  PolicyDocument:
+					Id: RequireEncryptionInTransit
+					Version: '2012-10-17'
+					Statement:
+					  - Principal: '*'
+						Action: '*'
+						Effect: Deny
+						Resource:
+						  - !GetAtt Bucket.Arn
+						  - !Sub ${Bucket.Arn}/*
+						Condition:
+						  Bool:
+							aws:SecureTransport: 'false'		
+							
+							
+		Infra-Structure Configuration ::::
+		
+		
+			CloudFormation Template : UserData 
+		
+		
+	Elastic BeanStalk :::
+		- PAAS
+		
+		- Fully Managed PaaS 
+		
+		- Security Patch Updates in all the target servers 
+		
+		- Support various language platforms :
+		
+			- Python,Ruby,PHP,Go,COBOL,Java,.Net,Docker,Tomcat,Nginx,httpd 
+
+			- WAS - Web Application Servers : 
+			
+			- Load-Balancer --> 
+			
+	
+		Elastic BeanStalk Components :
+		
+			- Application 
+			
+			- Application Version 
+					- Artifactory Libraries 
+					
+					- Packaged as *.zip_v1.0
+					
+			- Environment 
+			
+				Non-Prod  ==> Prod 
+	
+			- Environment Health :
+			
+				--> Health Checker --> Monitoring 
+				
+				--> Elastic BeanStalk Health Monitor 
+				
+					-- Diff Color Codes 
+					
+					
+		Architecture of Elastic BeanStalk :
+			
+			--> Elastic BeanStalk Environments
+			--> Elastic Load-Balancer
+			--> Auto Scaling Group 
+			
+			--> EC2 Instances 
+			
+			--> Security Groups 
+		
+			--> Storage 
+				--> EBS / EFS / MSG Queue
+				
+			--> Docker Image 
+			
+			
+		Elastic BeanStalk Proces Workflow ::::
+		
+			--> S3 Bucket 
+			--> Elastic BeansStack Project 
+			--> Security Group 
+			--> Auto Scaling Group 
+			--> Auto Scaling Group Policies 
+			--> CloudWatch Alarms 
+			--> Load Balancer 
+			--> EC2 Instances 
+			--> Applications Environments
+			
+	
+		AWS OpsWork --> Configuration Management Tool :::  --> stopped this service!		
+		
+	Kubernetes-Master(Prod)
+		Kubernetes-WorkerNode1,2,3,4,5
+		
+	
+		Kubernetes :::
+
+			- Kubernetes is an Open-Source Container Orchestration Tool 
+			- To ensure high availability of Containerized Applications
+			- By create replicas
+			- Auto-Scale : Scale-up/Scale-Down
+			- Load-Balancing 
+			- Self-Healing 
+			- Used to Achieve Upgrade or Downgrade without any downtime 
+
+	
+			sign_in service 
+	
+				-> Front-End Layer 		# User Interaction		C1.1,C1.2,C1.3
+				
+				-> Application Layer 	# Business Logics 		C2.1,C2.2,C2.3
+				
+				-> Back-End Layer 		# Database 				C3.1,C3.2,C3.3 	
+
+
+		Core Concepts of Kubernetes :
+		
+			- Pods 					# Atomic unit of scheduling, Pod executes the Containers within 
+			
+			- Contianer Image 
+			
+			- Container 
+			
+			- Container Registry 
+			
+			- kubeadm 				# Command Line Utility to Configure Kubernetes Cluster 
+
+			- kubectl				# Command Line Utility to Interact with Kubernetes Master 
+			
+			- Kubernetes-Cluster 	# Collection of WorkerNodes 
+	
+	
+				Kubernetes-Master(Prod)					# To Create and Schedule the Pods for Deployments 
+				
+					Kubernetes-WorkerNode1,2,3,4,5		# To run the Application Pods 	
+					
+			7 Replicas of Pods :
+			
+			
+			Kubernetes-Master 
+			
+				Kubernetes-Cluster					Logical grouping of WorkerNodes 
+					Kubernetes-WorkerNode1			Physical Entity	to run the pod  *.war --> App_Img --> Pod(Container) 
+					Kubernetes-WorkerNode2
+					Kubernetes-WorkerNode3
+					Kubernetes-WorkerNode4
+					Kubernetes-WorkerNode5
+		
+
+			Kubernetes-Master 								On-Prem 
+		
+				Kubernetes-Master 								AWS 
+				
+					Kubernetes-Cluster1							AWS Region1
+						Kubernetes-WorkerNode1
+						Kubernetes-WorkerNode2
+						Kubernetes-WorkerNode3
+				
+					Kubernetes-Cluster2							AWS Region2
+						Kubernetes-WorkerNode1
+						Kubernetes-WorkerNode2
+						Kubernetes-WorkerNode3			
+				
+					Kubernetes-Cluster3							AWS Region3
+						Kubernetes-WorkerNode1
+						Kubernetes-WorkerNode2
+						Kubernetes-WorkerNode3				
+			
+				Kubernetes-Master 								Azure  
+				
+					Kubernetes-Cluster1							Azure Region1
+						Kubernetes-WorkerNode1
+						Kubernetes-WorkerNode2
+						Kubernetes-WorkerNode3
+				
+					Kubernetes-Cluster2							Azure Region2
+						Kubernetes-WorkerNode1
+						Kubernetes-WorkerNode2
+						Kubernetes-WorkerNode3			
+				
+					Kubernetes-Cluster3							Azure Region3
+						Kubernetes-WorkerNode1
+						Kubernetes-WorkerNode2
+						Kubernetes-WorkerNode3							
+						
+			
+		
+		
+					
+	
+	
