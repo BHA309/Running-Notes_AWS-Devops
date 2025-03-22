@@ -1826,7 +1826,153 @@ Day 6 - 16th Mar. 2025
 						
 			
 		
+
 		
+########################
+Day 7 - 22nd Mar. 2025
+########################			
+					
+	-> Continuous Monitoring :::
+	
+			- Is used to achieve business continuity..
+			
+			- Continuously Monitor the Infra-Structure and the Applications running in the Production Environment
+			
+			- Completely owned and managed by Infra-Structure Monitoring Team. 
+			
+			- Infra-Structure Monitoring 
+			
+				-  Production Server :
+				
+						--> CPU Utilization 
+						
+						--> Memory Utilization 
+						
+						--> Network Traffic 
+						
+						
+					Monitoring Tools :
+					
+						- Prometheus/Grafana/Splunk/Dynatrace/Kafka/Nagios
+						- AWS - AWS CloudWatch 
+						
+							-> 75% of threshold Limit
+							
+							-> Alert the Users (Production Support/Stakeholder)
+						
+			
+			- Application Monitoring ::
+			
+				--> AppDynamics / DataDog	
+				
+	
+	Environments :::
+	
+		Non-Prod 															Prod Environments 
+		
+			Kubernetes-Cluster(Non-Prod)(Business Hours)
+		
+				Dev 
+		
+				QA 
+		
+				UAT 								==========>					Kubernetes-Cluster(Prod)(24/7*)
+																					- Active(LIVE) / Passive Environments
+		
+	Architecture of Monitoring Tools :
+	
+		- Monitoring Server :(VM) 
+		
+			Server(Monitoring Server) and Clients(Target servers) 
+			
+		- Monitoring Agent should be installed in the Target Server 
+		
+		- Database (TimeSeries DataBase)
+		
+	
+	AWS Cloud Watch ==> Kubernetes-Cluster (EKS)
+	
+	Kubernetes-Cluster(Open-Source) ==> Prometheus/Grafana
+	
+	
+	Prometheus/Grafana/Splunk/Dynatrace/Kafka/Nagios :
+	
+	
+		DB_Server -> Onprem 
+	
+		Web Application Servers (AWS)	--> AWS CloudWatch(SaaS)
+		
+		Web Application Servers (Azure)	--> Azure Monitor	
+	
+	
+	Logging/Reporting Tools :::
+	
+	Online - E_Commerce :
+	
+		Infra-Structure --> To ensure the Servers/Resources Availability 
+		
+		
+		User Transaction --> signin,prod,payment(no response)
+
+	Monitoring Tools :::
+	
+		Install and Configure the Monitoring Tools :::
+		
+		
+	CICD Pipeline :
+	
+		Builds 		(frequently) (Temp Build Environment) ==> Result based on the artifacts 
+		
+					(Attach Cloud Watch Monitoring Log) == To create log Stream
+					
+		Prometheus/Grafana/Splunk/Dynatrace/Kafka/Nagios  -- 3rd Party Monitoring Tools :::
+		
+		
+		Dedicated Monitoring Server (Dbase)	==> query the logs and send to the users thru email/Dashboard(grafana)
+		
+		VM - Install the Monitoring Tool.
+		
+	
+	Prometheus & Grafana :
+	
+	
+	https://prometheus.io/download/
+	
+	
+	
+	Monitoring : Kubernetes-Cluster
+	
+	Prod Server: 3 - 5 
+	
+		Target Servers :
+		
+	
+		Kubernetes-Cluster :
+		
+			Kubernetes-WorkerNode1,2,3,4,5,6,7,8,9,...............,175
+	
+	
+	
+	Execute Prometheus & Grafana as pods.
+	
+	Using Helm Charts we can configure the Monitoring Services 
+	
+	Helm Charts	# Package Manager for Kubernetes
+	
+	
+	- Create/Setup Kubernetes-Cluster
+	
+	- Deploy the Pods
+	
+	- Helm Charts to Install and Configure Monitoring Tools & Dashboards 
+	
+	- Daemonsets 		# Used to Execute Prometheus/Grafana in Kubernetes-Cluster for monitoring 
+
+Next ::
+
+	- Deploy the Pods
+	
+	- Helm Charts to Install and Configure Monitoring Tools & Dashboards 			
 					
 	
 	
