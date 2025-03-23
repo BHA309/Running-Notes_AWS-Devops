@@ -1975,4 +1975,176 @@ Next ::
 	- Helm Charts to Install and Configure Monitoring Tools & Dashboards 			
 					
 	
+
 	
+########################
+Day 8 - 23rd Mar. 2025
+########################	
+	
+	
+	CICD : 
+	
+	
+	Kubernetes Manifest File :
+	
+	
+	Kubernetes Deployment Controller Object :
+	
+		- Deploy the Pods using pod replicas 
+		- It ensure high availability of pods by creating replicas of pods. 
+		- Deployment object will automaticall create replicaset.
+		- Auto-Scaling : Scale-up/Scale-Down
+		- Self-Healing 
+		- Ensure ZERO Downtime during Application Upgrade/Downgrade.
+		- Deployment Controller Object uses Deployment Strategy : Rolling Update Strategy
+		
+		Horizontal Scaling 			/ 	Vertical Scaling 
+		
+		
+		
+		1. Deployment Object 
+		
+		2. Replicaset 
+		
+		3. Pod Instance 
+		
+		
+		
+		App_Service :
+		
+			1000 Users  	-	 100 Instance of Pods(replicas)
+		
+			10000 Users
+		
+		
+		
+		Continuous Deployment :::
+	
+				- Continuous Deployment can be achieved only with the Micro-Service Based Application Architecture	
+				
+				
+		
+	App_Service1	:		2 Replicas of Pods 
+	
+	
+	
+		App_Service1.war_v1.0		====>			App_Service1_Img:v1.0
+		
+		App_Service1.war_v2.0		====>			App_Service1_Img:v2.0	
+	
+	
+	
+		Deployment Controller Object uses Deployment Strategy : Rolling Update Strategy
+	
+	
+		p1 	App_Service1_Img:v1.0			p1.1	App_Service1_Img:v2.0
+		
+		p2	App_Service1_Img:v1.0			p2.1	App_Service1_Img:v2.0
+		
+		p3 	App_Service1_Img:v1.0			p3.1	App_Service1_Img:v2.0
+	
+	
+	
+	Monitoring Kubernetes :::::
+	
+		
+		Use Prometheus/Grafana :::
+	
+		Helm Package Manager :::
+		
+		
+		Install Helm 
+		
+		Using Helm 
+		
+		Install Prometheus/Grafana Package in Kubernetes
+		
+		Linux Package Managers :
+		
+			yum / apt / dnf 	-- Used to manage the packages in specific Linux Node
+		
+		
+		HELM Chart:::
+		Helm is a pkg manager for kubernetes which help to automatically create manifest files for any kubernetes objects in the form of HELM Charts
+	
+	
+		13.234.76.2:31259
+		
+		31259
+		
+	
+		
+		RBAC :::
+		
+			Role Base Access Control :
+			
+				--> Namespace Level : based on specific team/environment 
+				
+				--> Cluster Level : includes all Namespaces 
+				
+		Kubernetes Namespace :
+			- Logical partition of Kubernetes-Cluster 
+			
+			
+			
+			Kubernetes-Master 								Namespace : dev / qa / uat 
+				Kubernetes-WorkerNode1,2,3,4
+				
+				
+				
+		c:/ 
+		
+			dev : 
+					
+				*.html 			>>> Secret Volume : Security Vaults 
+				*.java 
+				*.doc 
+				*.mp3
+		
+
+			qa : 
+					
+				*.html 
+				*.java 
+				*.doc 
+				*.mp3
+				
+		
+		Source Code :
+		
+			Scan for Code Quality -- SonarQube - Static Code Analyzer
+
+
+	Dev 
+	
+		Create Source-Code 
+			Scan for Code Quality -- SonarQube - Static Code Analyzer
+				- Code Coverage 
+				- Test Coverage 
+
+	
+	SCM_Checkout
+	
+	Application_Build 
+			- Create Artifacts 
+			- Unit Testing 
+			- Sonarqube Analysis --> Code Quality and Code Coverage - Test Coverage
+			
+	Application_Container_Image
+			- Container Image 
+		
+		FROM ubuntu
+		
+	
+DevOps Path:
+
+-> AWS DevOps Service : ****
+
+-> Azure DevOps Services :
+
+-> Github Repo & GitHub Actions - To Create CICD Pipelines :
+					
+-> Gitlab Repo & GitLab-CI - To Create CICD Pipelines :
+	
+			
+		
